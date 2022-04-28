@@ -7,7 +7,17 @@ query($path:ID!){
       displayName
       ... on ${APP_NAME_UNDERSCORED}_Person {
         data {
-          bio
+          bio(processHtml:{type:absolute}) {
+            processedHtml
+            links {
+              ref
+              media {
+                content {
+                  _id
+                }
+              }
+            }
+          }
           dateofbirth
           photos {
            ... on media_Image {                                             

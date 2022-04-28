@@ -1,8 +1,10 @@
 import React from "react"
 import {FetchContentResult} from '../../_enonicAdapter/guillotine/fetchContent';
 import {getUrl} from '../../_enonicAdapter/utils'
+import RichTextView from '../../_enonicAdapter/views/RichTextView';
 
 const Person = (props: FetchContentResult) => {
+    const meta = props.meta;
     const {displayName, data, parent} = props.data?.get as any;
     const {bio, photos} = data;
     const {_path} = parent;
@@ -11,7 +13,7 @@ const Person = (props: FetchContentResult) => {
         <>
             <div>
                 <h2>{displayName}</h2>
-                <p>{bio}</p>
+                <RichTextView mode={meta?.renderMode} data={bio}/>
                 {
                     photos.map((photo: any, i: number) => (
                         <img key={i}
