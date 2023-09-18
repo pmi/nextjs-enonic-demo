@@ -19,8 +19,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         if (!path) {
             console.info('Started revalidating everything...');
             const projectId = req.headers[PROJECT_ID_HEADER] as string | undefined;
+            console.info('revalidation projectId: ' + projectId);
             const config = getLocaleProjectConfigById(projectId);
+            console.info('revalidation config: ' + JSON.stringify(config, null, 2));
             const paths = await fetchContentPathsForLocale('\${site}/', config);
+            console.info('revalidation paths length: ' + paths?.length);
             const promises = paths.map((item: ContentPathItem) => {
                 const cp = item.params.contentPath;
                 if (cp[0] === "") {
@@ -43,6 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 async function revalidatePath(res: any, path: string[] | string) {
     let normalPath;
+    console.info('revalidation path: ' + path);
     if (typeof path === 'string') {
         normalPath = path.charAt(0) !== '/' ? '/' + path : path;
     } else {
