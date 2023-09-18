@@ -14,8 +14,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
 
     try {
-        // Return 200 immediately and do revalidate in background
-        res.status(200).json({message: 'Revalidation started'});
         if (!path) {
             console.info('Started revalidating everything...');
             const projectId = req.headers[PROJECT_ID_HEADER] as string | undefined;
@@ -39,6 +37,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             await revalidatePath(res, path);
             console.info(`Revalidated [${path}]`);
         }
+        // Return 200 after everything's revalidated
+        res.status(200).json({message: 'Revalidation started'});
     } catch (err) {
         console.error(`Revalidation [${path ?? 'everything'}] error: ` + err);
     }
