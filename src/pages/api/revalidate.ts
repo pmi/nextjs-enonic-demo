@@ -31,11 +31,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                 }
                 return revalidatePath(res, cp);
             });
-            await Promise.all(promises);
-            console.info(`Done revalidating everything`);
+            Promise.all(promises).then(() => {
+                console.info(`Done revalidating everything`);
+            }).catch((err) => {
+                console.info(`Revalidation error: ` + err);
+            });
         } else {
-            await revalidatePath(res, path);
-            console.info(`Revalidated [${path}]`);
+            revalidatePath(res, path).then(() => {
+                console.info(`Revalidated [${path}]`);
+            }).catch((err) => {
+                console.info(`Revalidation error: ` + err);
+            });
         }
         // Return 200 after everything's revalidated
         res.status(200).json({message: 'Revalidation started'});
